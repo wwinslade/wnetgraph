@@ -1,0 +1,9 @@
+(* Basic Setup *)
+newgraph
+xaxis min 0 max 10 nodraw
+yaxis min 0 max 10 nodraw
+
+(* Monitor Stand *)
+newline poly linethickness 1 color 0 0 0 pcfill 0 0.66 0.86 pts 0 0   10 0   10 1   5.5 1   5.5 4   4.5 4   4.5 1   0 1
+newline poly linethickness 1 color 0 0 0 pcfill 0 0.66 0.86 pts 0 4   10 4   10 10  0 10 
+newline poly linethickness 1 color 0 0 0 pcfill 1 1 1 pts 1 5   9 5   9 9   1 9

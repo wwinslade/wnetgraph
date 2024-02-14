@@ -1,0 +1,11 @@
+newgraph
+xaxis min 0 max 29 size 2.41529 nodraw
+yaxis min 0 max 2 size 1.26316 nodraw
+border
+newstring font Courier fontsize 10 x 1 y 1 hjl vjc :
+#include <stdio.h>\
+\
+main()\
+{\
+  printf("Hello World\n");\
+}

@@ -1,0 +1,7 @@
+// This is a comment. The space after the double slashes is important.
+
+NETWORK LAN 1
+  ROUTER R1 LINKS SWITCH S1 SWITCH S2
+  SWITCH S1 LINKS SWITCH S2 HOST PC1 HOST PC2
+  SWITCH S2 LINKS SWITCH S1 HOST PC3 HOST PC4
+END

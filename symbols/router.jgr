@@ -1,0 +1,18 @@
+(* Basic Setup *)
+newgraph
+xaxis min 0 max 10 nodraw
+yaxis min 0 max 10 nodraw
+
+(* Circle *)
+newcurve marktype circle marksize 10 1
+  linetype solid cfill 0 0.62 0.86
+pts 5 5
+
+(* Inward Facing Arrows *)
+newline poly linethickness 1 color 0 0 0 pcfill 1 1 1 pts 4.5 5   3.3 6.2   3.3 5.4   0.5 5.4   0.5 4.6   3.3 4.6   3.3 3.8
+newline poly linethickness 1 color 0 0 0 pcfill 1 1 1 pts 5.5 5   6.7 6.2   6.7 5.4   9.5 5.4   9.5 4.6   6.7 4.6   6.7 3.8
+
+(* Outward Facing Arrows *)
+newline poly linethickness 1 color 0 0 0 pcfill 1 1 1 pts 5 9.5   6.2 8.3   5.4 8.3   5.4 5.5   4.6 5.5   4.6 8.3   3.8 8.3 
+newline poly linethickness 1 color 0 0 0 pcfill 1 1 1 pts 5 0.5   6.2 1.7   5.4 1.7   5.4 4.5   4.6 4.5   4.6 1.7   3.8 1.7
+
