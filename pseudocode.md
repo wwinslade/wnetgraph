@@ -4,6 +4,7 @@ class node
   hostname
   int depth
   device type
+  vector of parents/uplinks < node * >
   vector of peers < node * >
   vector of children < node * >
 
@@ -13,7 +14,9 @@ class graph
   int printwidth, printheight
 
 graph::graph(argc, argv)
-  Perform input validation on CLI passed arguments, check for good input and output file
+  Perform input validation on CLI passed arguments 
+  Check for good input and output file, that the extension of the output file is a .jgr, input is .wnet
+  
 
   create a new node to act as the sentinel
   set sentinel depth to -1
@@ -43,8 +46,16 @@ int graph::find_print_dims()
     Track the largest depth integer encountered
   Depending on file spec, set the printing width based on the number of leaf nodes
   Depending on file spec, set the printing height based on the number of leaf nodes
-
+  
   return
 
 void graph::to_jgraph()
-  
+  Open the output file
+  Check that the output file is valid, ready to be written to
+  Print out basic jgraph setup to the .jgr file
+  Perform a traversal of the vector of members, print out the link lines
+  Perform a post-order traversal of the tree of members
+    Print out the .eps representations onto the graph
+
+void graph::jgraph_to_pdf()
+  // Do I want to convert the jgraph file to a .ps here, or in a shell script?
