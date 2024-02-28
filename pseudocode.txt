@@ -1,15 +1,14 @@
+# Pesudocode for Main program
 
 class node
   hostname
   int depth
-  int x, y for where to print the .eps representations
   device type
-  vector of parents < node * >
   vector of peers < node * >
   vector of children < node * >
 
 class graph
-  node *sentinel. Shouldn't be a real node, moreso just a pointer to the primary router of the network
+  node *sentinel
   vector of *nodes (not including the sentinel)
   int printwidth, printheight
 
@@ -17,7 +16,7 @@ graph::graph(argc, argv)
   Perform input validation on CLI passed arguments, check for good input and output file
 
   create a new node to act as the sentinel
-  set sentinel depth to -1 (maybe 0, yet to decide)
+  set sentinel depth to -1
   set sentinel name to "---SENTINEL---"
   set sentinel device type to NULL
   
@@ -33,28 +32,19 @@ graph::graph(argc, argv)
       read in the rest of the line's device attributes (type, children, parents, peers)
       create a new node, set depth to be parent's depth plus 1
       set node's attributes to represent device's attributes
-      create links between node and its parents, peers, or children, if applicable
+      create links between node and its parents (or children, if applicable)
     else
-      throw exception, unparsable file format, ignore line and keep reading
+      throw error, bad file format
   return
 
-void graph::find_print_dims()
+int graph::find_print_dims()
   Traverse the graph's vector of all nodes
     Count the nodes that are leafs
     Track the largest depth integer encountered
-  Depending on file spec, set the printing width value in the Graph * based on the number of leaf nodes
-  Depending on file spec, set the printing height in the Graph * based on the number of leaf nodes
+  Depending on file spec, set the printing width based on the number of leaf nodes
+  Depending on file spec, set the printing height based on the number of leaf nodes
+
+  return
 
 void graph::to_jgraph()
-  Open the output file
-  Perform an in-order traversal of the whole graph
-    Print jgraph for black lines between each node and its parents/children/peers to represent links
-    Optional: Go into each node's parents/children/peers and mark the link as printed to prevent double prints (probably unnecessary)
-  
-  Perform another in-order traversal of the whole graph
-    Print the appropriate .eps representation of each node at the node's xy coords
-  
-maybe: jgraph to .ps. Not sure if I want to do this in a makefile/shellscript or in the cpp file yet.
-
-
   
