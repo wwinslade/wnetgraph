@@ -1,0 +1,70 @@
+R0
+type gateway
+host Agg1
+host Agg2
+end
+
+Agg1
+peer Agg2
+type switch
+end
+
+Agg2
+type switch
+end
+
+Dist1
+uplink Agg1
+uplink Agg2
+uplink R0
+type switch
+peer Dist2
+end
+
+Dist2
+uplink Agg1
+uplink Agg2
+type switch
+peer Dist3
+end
+
+Dist3
+uplink Agg1
+uplink R0
+peer Dist4
+type switch
+end
+
+Dist4
+uplink R0
+uplink Agg1
+uplink Agg2
+type switch
+end
+
+PC1
+uplink Dist1
+end
+
+PC2
+uplink Dist2
+end
+
+Access1
+uplink Dist3
+peer Access2
+type switch
+host PC3
+end
+
+Access2
+uplink Dist4
+type switch
+host PC4
+end
+
+PC4
+uplink Dist4
+end
+
+done

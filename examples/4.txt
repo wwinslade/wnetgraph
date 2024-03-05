@@ -1,0 +1,77 @@
+R0
+type gateway
+host Knoxville Office
+host Nashville Office
+end
+
+Knoxville Office
+type router
+host KR1
+host KR2
+peer Nashville Office
+end
+
+KR1
+type router
+host KS1
+host KS2
+host KS3
+peer KR2
+end
+
+KR2
+type router
+host KS1
+host KS2
+host KS3
+peer KR1
+end
+
+KS1
+type switch
+host Cluster 1
+peer KS2
+peer KS3
+end
+
+KS2
+type switch
+host Cluster 2
+peer KS1
+peer KS3
+end
+
+KS3
+type switch
+host Cluster 3
+peer KS1
+peer KS2
+end
+
+Nashville Office
+type router
+host NR1
+peer Knoxville Office
+end
+
+NR1
+type router
+host NS1
+host NS2
+end
+
+NS1
+type switch
+host PC0
+host PC1
+host PC2
+peer NS2
+end
+
+NS2
+type switch
+host PC3
+host PC4
+host PC5
+peer NS1
+end

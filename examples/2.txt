@@ -1,0 +1,26 @@
+R0
+type gateway
+host R1
+host R2
+end
+R1
+type router
+host SW2
+host SW1
+end
+SW1
+host PC1
+host PC2
+peer SW2
+type switch
+end
+SW2
+host PC3
+host PC4
+peer SW1
+type switch
+end
+PC1
+uplink SW1
+uplink SW2
+end

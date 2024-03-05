@@ -1,0 +1,10 @@
+R1
+type gateway
+host SW1
+end
+SW1
+type switch
+host PC1
+host PC2
+end
+done
