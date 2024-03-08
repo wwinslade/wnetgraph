@@ -6,7 +6,7 @@ newline pts 0 7.5 0 0
 newline pts 0 0 7.5 -7.5
 newline pts 0 0 -7.5 -7.5
 
-newcurve eps symbols/client.eps marksize 3 3 pts 7.5 -7.5
 newcurve eps symbols/client.eps marksize 3 3 pts -7.5 -7.5
-newcurve eps symbols/router.eps marksize 3 3 pts 0 7.5
 newcurve eps symbols/switch.eps marksize 3 3 pts 0 0
+newcurve eps symbols/client.eps marksize 3 3 pts 7.5 -7.5
+newcurve eps symbols/router.eps marksize 3 3 pts 0 7.5

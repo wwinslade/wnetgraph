@@ -4,14 +4,14 @@ yaxis min -20 max 20 nodraw
 
 newline pts 0 12 8 4
 newline pts 8 4 8 -4
-newline pts 8 -4 0 -12
+newline pts 8 -4 8 -12
 newline pts 0 12 -8 4
 newline pts -8 4 -8 -4
-newline pts -8 -4 0 -12
+newline pts -8 -4 8 -12
 
-newcurve eps symbols/router.eps marksize 3 3 pts 0 12
-newcurve eps symbols/router.eps marksize 3 3 pts 8 4
-newcurve eps symbols/router.eps marksize 3 3 pts -8 4
-newcurve eps symbols/router.eps marksize 3 3 pts 8 -4
 newcurve eps symbols/router.eps marksize 3 3 pts -8 -4
-newcurve eps symbols/router.eps marksize 3 3 pts 0 -12
+newcurve eps symbols/router.eps marksize 3 3 pts 8 -4
+newcurve eps symbols/router.eps marksize 3 3 pts -8 4
+newcurve eps symbols/router.eps marksize 3 3 pts 8 -12
+newcurve eps symbols/router.eps marksize 3 3 pts 8 4
+newcurve eps symbols/router.eps marksize 3 3 pts 0 12
