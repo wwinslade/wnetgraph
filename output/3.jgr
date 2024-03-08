@@ -1,68 +1,71 @@
 newgraph
-xaxis min 0 max 130 nodraw
-yaxis min 0 max 130 nodraw
+xaxis min -70 max 70 nodraw
+yaxis min -70 max 70 nodraw
 
-newline pts 125 45 125 35
-newline pts 125 35 125 25
-newline pts 125 25 105 15
-newline pts 125 25 115 25
-newline pts 125 35 115 25
-newline pts 115 25 95 15
-newline pts 115 25 125 25
-newline pts 115 25 105 25
-newline pts 125 35 105 25
-newline pts 105 25 125 15
-newline pts 125 15 125 5
-newline pts 125 15 115 15
-newline pts 105 25 115 25
-newline pts 105 25 95 25
-newline pts 125 35 95 25
-newline pts 95 25 115 15
-newline pts 115 15 115 5
-newline pts 115 15 125 15
-newline pts 95 25 115 5
-newline pts 95 25 105 25
-newline pts 125 35 115 35
-newline pts 125 45 115 35
-newline pts 115 35 125 25
-newline pts 125 25 105 15
-newline pts 125 25 115 25
-newline pts 115 35 115 25
-newline pts 115 25 95 15
-newline pts 115 25 125 25
-newline pts 115 25 105 25
-newline pts 115 35 95 25
-newline pts 95 25 115 15
-newline pts 115 15 115 5
-newline pts 115 15 125 15
-newline pts 95 25 115 5
-newline pts 95 25 105 25
-newline pts 115 35 125 35
-newline pts 125 45 125 25
-newline pts 125 25 105 15
-newline pts 125 25 115 25
-newline pts 125 45 105 25
-newline pts 105 25 125 15
-newline pts 125 15 125 5
-newline pts 125 15 115 15
-newline pts 105 25 115 25
-newline pts 105 25 95 25
-newline pts 125 45 95 25
-newline pts 95 25 115 15
-newline pts 115 15 115 5
-newline pts 115 15 125 15
-newline pts 95 25 115 5
-newline pts 95 25 105 25
-newcurve eps symbols/switch.eps marksize 3 3 pts 125 15
-newcurve eps symbols/switch.eps marksize 3 3 pts 115 15
-newcurve eps symbols/switch.eps marksize 3 3 pts 125 35
-newcurve eps symbols/switch.eps marksize 3 3 pts 115 35
-newcurve eps symbols/switch.eps marksize 3 3 pts 125 25
-newcurve eps symbols/switch.eps marksize 3 3 pts 115 25
-newcurve eps symbols/switch.eps marksize 3 3 pts 105 25
-newcurve eps symbols/switch.eps marksize 3 3 pts 95 25
-newcurve eps symbols/client.eps marksize 3 3 pts 105 15
-newcurve eps symbols/client.eps marksize 3 3 pts 95 15
-newcurve eps symbols/client.eps marksize 3 3 pts 125 5
-newcurve eps symbols/client.eps marksize 3 3 pts 115 5
-newcurve eps symbols/router.eps marksize 3 3 pts 125 45
+newline pts 0 60.6667 0 51.3333
+newline pts 0 51.3333 9.33333 42
+newline pts 9.33333 42 18.6667 32.6667
+newline pts 9.33333 42 -9.33333 42
+newline pts 0 51.3333 -9.33333 42
+newline pts -9.33333 42 -18.6667 32.6667
+newline pts -9.33333 42 9.33333 42
+newline pts -9.33333 42 18.6667 42
+newline pts 0 51.3333 18.6667 42
+newline pts 18.6667 42 9.33333 32.6667
+newline pts 9.33333 32.6667 9.33333 23.3333
+newline pts 9.33333 32.6667 -9.33333 32.6667
+newline pts 18.6667 42 -9.33333 42
+newline pts 18.6667 42 -18.6667 42
+newline pts 0 51.3333 -18.6667 42
+newline pts -18.6667 42 -9.33333 32.6667
+newline pts -9.33333 32.6667 -9.33333 23.3333
+newline pts -9.33333 32.6667 9.33333 32.6667
+newline pts -18.6667 42 -9.33333 23.3333
+newline pts -18.6667 42 18.6667 42
+newline pts 0 51.3333 9.33333 51.3333
+newline pts 0 60.6667 9.33333 51.3333
+newline pts 9.33333 51.3333 9.33333 42
+newline pts 9.33333 42 18.6667 32.6667
+newline pts 9.33333 42 -9.33333 42
+newline pts 9.33333 51.3333 -9.33333 42
+newline pts -9.33333 42 -18.6667 32.6667
+newline pts -9.33333 42 9.33333 42
+newline pts -9.33333 42 18.6667 42
+newline pts 9.33333 51.3333 -18.6667 42
+newline pts -18.6667 42 -9.33333 32.6667
+newline pts -9.33333 32.6667 -9.33333 23.3333
+newline pts -9.33333 32.6667 9.33333 32.6667
+newline pts -18.6667 42 -9.33333 23.3333
+newline pts -18.6667 42 18.6667 42
+newline pts 9.33333 51.3333 0 51.3333
+newline pts 0 60.6667 -9.33333 51.3333
+newline pts 0 60.6667 9.33333 42
+newline pts 9.33333 42 18.6667 32.6667
+newline pts 9.33333 42 -9.33333 42
+newline pts 0 60.6667 18.6667 42
+newline pts 18.6667 42 9.33333 32.6667
+newline pts 9.33333 32.6667 9.33333 23.3333
+newline pts 9.33333 32.6667 -9.33333 32.6667
+newline pts 18.6667 42 -9.33333 42
+newline pts 18.6667 42 -18.6667 42
+newline pts 0 60.6667 -18.6667 42
+newline pts -18.6667 42 -9.33333 32.6667
+newline pts -9.33333 32.6667 -9.33333 23.3333
+newline pts -9.33333 32.6667 9.33333 32.6667
+newline pts -18.6667 42 -9.33333 23.3333
+newline pts -18.6667 42 18.6667 42
+
+newcurve eps symbols/switch.eps marksize 3 3 pts 9.33333 32.6667
+newcurve eps symbols/switch.eps marksize 3 3 pts -9.33333 32.6667
+newcurve eps symbols/switch.eps marksize 3 3 pts 0 51.3333
+newcurve eps symbols/switch.eps marksize 3 3 pts 9.33333 51.3333
+newcurve eps symbols/switch.eps marksize 3 3 pts -9.33333 51.3333
+newcurve eps symbols/switch.eps marksize 3 3 pts 9.33333 42
+newcurve eps symbols/switch.eps marksize 3 3 pts -9.33333 42
+newcurve eps symbols/switch.eps marksize 3 3 pts 18.6667 42
+newcurve eps symbols/switch.eps marksize 3 3 pts -18.6667 42
+newcurve eps symbols/client.eps marksize 3 3 pts 18.6667 32.6667
+newcurve eps symbols/client.eps marksize 3 3 pts -18.6667 32.6667
+newcurve eps symbols/client.eps marksize 3 3 pts 9.33333 23.3333
+newcurve eps symbols/client.eps marksize 3 3 pts -9.33333 23.3333
+newcurve eps symbols/router.eps marksize 3 3 pts 0 60.6667

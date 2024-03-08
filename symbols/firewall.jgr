@@ -1,0 +1,28 @@
+(* Basic setup *)
+newgraph
+xaxis min 0 max 10 nodraw
+yaxis min 0 max 10 nodraw
+
+(* White background to avoid transparency issues *)
+newline poly linethickness 0 color 0 0 0 pcfill 1 1 1 pts 0 0  10 0  10 10  0 10
+
+(* Firewall Box *)
+newline poly linethickness 17 pfill -1 color 0 0.62 0.86 pts 0 0  10 0  10 10  0 10
+
+(* Horizontal Lines *)
+newline linethickness 17 color 0 0.62 0.86 pts 0 7.5 10 7.5
+newline linethickness 17 color 0 0.62 0.86 pts 0 5 10 5
+newline linethickness 17 color 0 0.62 0.86 pts 0 2.5 10 2.5
+
+(* Vertical lines *)
+newline linethickness 17 color 0 0.62 0.86 pts 4 10 4 7.5
+newline linethickness 17 color 0 0.62 0.86 pts 8 10 8 7.5
+
+newline linethickness 17 color 0 0.62 0.86 pts 2 7.5 2 5
+newline linethickness 17 color 0 0.62 0.86 pts 6 7.5 6 5
+
+newline linethickness 17 color 0 0.62 0.86 pts 4 5 4 2.5 
+newline linethickness 17 color 0 0.62 0.86 pts 8 5 8 2.5
+
+newline linethickness 17 color 0 0.62 0.86 pts 2 2.5 2 0
+newline linethickness 17 color 0 0.62 0.86 pts 6 2.5 6 0

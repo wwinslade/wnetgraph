@@ -1,77 +1,66 @@
 R0
 type gateway
-host Knoxville Office
-host Nashville Office
+host EXTRA
 end
 
-Knoxville Office
+EXTRA
+type firewall
+host INTRA
+end
+
+INTRA
+type firewall
+host R1
+host R2
+end
+
+R1
 type router
-host KR1
-host KR2
-peer Nashville Office
+host SW1
+host SW2
+peer R2
 end
 
-KR1
-type router
-host KS1
-host KS2
-host KS3
-peer KR2
-end
-
-KR2
-type router
-host KS1
-host KS2
-host KS3
-peer KR1
-end
-
-KS1
+SW1
 type switch
-host Cluster 1
-peer KS2
-peer KS3
+host SERV1
+peer SW2
 end
 
-KS2
+SW2
 type switch
-host Cluster 2
-peer KS1
-peer KS3
-end
-
-KS3
-type switch
-host Cluster 3
-peer KS1
-peer KS2
-end
-
-Nashville Office
-type router
-host NR1
-peer Knoxville Office
-end
-
-NR1
-type router
-host NS1
-host NS2
-end
-
-NS1
-type switch
-host PC0
 host PC1
-host PC2
-peer NS2
 end
 
-NS2
+SERV1
+type server
+end
+
+PC1
+type host
+end
+
+R2
+type router
+host SW3
+host SW4
+end
+
+SW3
 type switch
-host PC3
-host PC4
-host PC5
-peer NS1
+host SERV2
+peer SW4
+end
+
+SW4
+type switch
+host PC2
+end
+
+SERV2
+type server
+end
+
+PC2
+type host
 end

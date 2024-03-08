@@ -1,0 +1,30 @@
+R1
+type gateway
+host R2
+host R3
+end
+
+R2
+type router
+host R4
+end
+
+R3
+type router
+host R5
+end
+
+R4
+type router
+host R6
+end
+
+R5
+type router
+host R6
+end
+
+R6
+type router
+end
+done

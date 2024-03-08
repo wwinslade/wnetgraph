@@ -1,0 +1,17 @@
+(* Basic setup *)
+newgraph
+xaxis min 0 max 10 nodraw
+yaxis min 0 max 10 nodraw
+
+(* White background to avoid transparency issues *)
+newline poly linethickness 0 color 1 1 1 pcfill 1 1 1 pts 0 0 10 0 10 10 0 10
+
+(* Server boxes  *)
+newline poly linethickness 1 color 0 0 0 pcfill 0 0.62 0.86 pts 0 0  10 0  10 3.18  0 3.18
+newline poly linethickness 1 color 0 0 0 pcfill 0 0.62 0.86 pts 0 3.48  10 3.48  10 6.51  0 6.51
+newline poly linethickness 1 color 0 0 0 pcfill 0 0.62 0.86 pts 0 6.81 10 6.81  10 10  0 10
+
+(* Server lights *)
+newcurve marktype circle marksize 1 1 linetype solid cfill 1 1 1 pts 9 1.59
+newcurve marktype circle marksize 1 1 linetype solid cfill 1 1 1 pts 9 5.07
+newcurve marktype circle marksize 1 1 linetype solid cfill 1 1 1 pts 9 8.4

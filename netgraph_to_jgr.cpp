@@ -4,8 +4,17 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <unordered_map>
 
 using namespace std;
+
+/*
+Notes for potential future improvement: Instead of traversing the map as I am now, 
+instead print using a DFS to allow better placement of child nodes relative to their
+parents. 
+
+While performing the DFS, still keep track of the coords used for each depth level
+*/
 
 // Typedef for spec of what the network device type is
 typedef enum 
@@ -16,6 +25,7 @@ typedef enum
   ROUTER,
   SWITCH,
   HOST,
+  SERVER,
 } NODETYPE;
 
 // Node class. These are held in a map keyed on the hostname string.
@@ -41,7 +51,6 @@ Node::Node() {
   children.clear();
   peers.clear();
   parents.clear();
-
 }
 
 // The class that does all the real work. 
@@ -56,6 +65,7 @@ class Graph {
     void Calculate_Positions();     // Determines how big the graph is, calculates places where Assign_Positions can place nodes in space, and assigns them to each node
     void Write_Links(Node *n);      // Writes jgraph link lines between nodes to output stream via DFS
     void Write_Jgraph();            // Writes jgraph setup, calls Write_Links, and prints each node's device symbol to the output stream
+    void Execute_All();
 
     int out_mode;                   // Defunct right now
 
@@ -64,7 +74,7 @@ class Graph {
     int nx, ny;                     // The dimensions of the jgraph graph
 
     Node *root;                     // Sentinel node for ease of access
-    map < string, Node * > all_nodes; // Map of all nodes, keyed on the hostname string
+    unordered_map < string, Node * > all_nodes; // Map of all nodes, keyed on the hostname string
     map < NODETYPE, string > eps_files; // Map of file locations for the .eps files used to print the various device symbols
 
     vector < int > depth_counts;    // Vector of number of nodes at each depth, where the depth is the index
@@ -91,7 +101,7 @@ void Graph::Read_New_Device(Node *n)
   string word1, wordn;
   string rest;
   istringstream sin;
-  map < string, Node * >::iterator mit;
+  unordered_map < string, Node * >::iterator mit;
   Node *nit;
 
   while(!fin.eof()) {
@@ -193,6 +203,8 @@ void Graph::Read_New_Device(Node *n)
         }
       } else if (wordn == "host") {
         n->type = HOST;
+      } else if (wordn == "server") {
+        n->type = SERVER;
       } else {
         printf("\t\tType unrecognized, try again");
       }
@@ -206,9 +218,9 @@ void Graph::Read_New_Device(Node *n)
 }
 
 void Graph::Print_Device() {
-  int i;
+  size_t i;
   Node *n;
-  map <string, Node *>::iterator mit;
+  unordered_map <string, Node *>::iterator mit;
 
   for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
     n = mit->second;
@@ -236,8 +248,7 @@ void Graph::Read_From_Stream()
   string name = "";
   istringstream liness;
   Node *device_in;
-  map < string, Node * >::iterator nit;
-  NODETYPE rm = GLOBAL;
+  unordered_map < string, Node * >::iterator nit;
   
   root = new Node;
   root->depth = -1;
@@ -274,7 +285,8 @@ void Graph::Read_From_Stream()
 
 void Graph::Assign_Depths(Node *n) {
   Node *nit;
-  int i, current_depth;
+  size_t i; 
+  int current_depth;
 
   current_depth = n->depth + 1;
   if (current_depth > max_depth) max_depth = current_depth;
@@ -291,7 +303,7 @@ void Graph::Count_Depths() {
   // To make printing neater, need a count of the number of nodes at each depth.
   // Can now simply traverse the map and count
   Node *nit;
-  map < string, Node * >::iterator mit;
+  unordered_map < string, Node * >::iterator mit;
 
   depth_counts.clear();
   depth_counts.resize(max_depth, 0);
@@ -314,9 +326,8 @@ void Graph::Calculate_Positions() {
   double minx, maxx, miny, maxy;
   double xslice_width;
   double yslice_width;
-  double pos;
   Node *nit;
-  map < string, Node * >::iterator mit;
+  unordered_map < string, Node * >::iterator mit;
   vector < int > pos_counter;
 
   // Go ahead and call the depth count method
@@ -329,12 +340,17 @@ void Graph::Calculate_Positions() {
   y_coords.clear();
 
   // If the graph has more leafs nodes than depth, use that to determine the size. Otherwise, vice versa
+  // I want to break the graph up into nice slices to neatly place the symbols, so determine the size of each slice
   if (num_leafs > max_depth) {
     nx = num_leafs * dims_coeff;
     ny = nx;
+    xslice_width = (double) nx / (num_leafs + 1);
+    yslice_width = (double) ny / (num_leafs + 1);
   } else {
     nx = max_depth * dims_coeff;
     ny = nx;
+    xslice_width = (double) nx / (max_depth + 1);
+    yslice_width = (double) ny / (max_depth + 1);
   }
 
   // I want (0,0) to be dead center of the graph, so find the min and max x and y
@@ -344,11 +360,6 @@ void Graph::Calculate_Positions() {
   maxy = 0 + ((double) ny / 2);
 
   printf("Global: x:[%lf, %lf] ; y:[%lf, %lf]\n", minx, maxx, miny, maxy);
-
-  // I want to break the graph up into nice slices to neatly place the symbols, so determine the size of each slice;
-  xslice_width = (double) nx / num_leafs;
-  yslice_width = (double) ny / (max_depth + 1);
-
   printf("X slice width: %lf\n", xslice_width);
   printf("Y slice width: %lf\n", yslice_width);
 
@@ -386,13 +397,13 @@ void Graph::Calculate_Positions() {
 
   // Debugging printing in these two loops
   printf("x_coords:");
-  for (i = 0; i < x_coords.size(); i++) {
+  for (i = 0; i < (int) x_coords.size(); i++) {
     printf(" %lf", x_coords[i]);
   }
   printf("\n");
 
   printf("y_coords:");
-  for (i = 0; i < y_coords.size(); i++) {
+  for (i = 0; i < (int) y_coords.size(); i++) {
     printf(" %lf", y_coords[i]);
   }
   printf("\n");
@@ -402,7 +413,7 @@ void Graph::Calculate_Positions() {
   pos_counter.resize(max_depth, 0);
 
   // For each depth, check if the number of nodes is even. If it is, exclude x=0, else, include it (help with centering for depths where num nodes is even)
-  for (i = 0; i < pos_counter.size(); i++) {
+  for (i = 0; i < (int) pos_counter.size(); i++) {
     if (depth_counts[i] % 2 == 0) {
       pos_counter[i] = 1;
     }
@@ -426,7 +437,7 @@ void Graph::Calculate_Positions() {
 
 
 void Graph::Write_Links(Node *n) {
-  int i;
+  size_t i;
 
   for (i = 0; i < n->children.size(); i++) {
     fout << "newline pts " << n->x << " " << n->y << " " << n->children[i]->x << " " << n->children[i]->y << endl;
@@ -439,9 +450,8 @@ void Graph::Write_Links(Node *n) {
 }
 
 void Graph::Write_Jgraph() {
-  ostream *os;
   Node *nit;
-  map < string, Node * > ::iterator mit;
+  unordered_map < string, Node * > ::iterator mit;
   int dims_coeff;
   double dims_offset;
 
@@ -465,25 +475,46 @@ void Graph::Write_Jgraph() {
   }
 
 }
+void Graph::Execute_All() {
+  // File paths for symbol .eps files are in this map
+  eps_files.clear();
+  eps_files.insert(make_pair(GATEWAY, "symbols/router.eps"));
+  eps_files.insert(make_pair(ROUTER, "symbols/router.eps"));
+  eps_files.insert(make_pair(SWITCH, "symbols/switch.eps"));
+  eps_files.insert(make_pair(HOST, "symbols/client.eps"));
+  eps_files.insert(make_pair(FIREWALL, "symbols/firewall.eps"));
+  eps_files.insert(make_pair(SERVER, "symbols/server.eps"));
+
+  Read_From_Stream();
+  Assign_Depths(root->children[0]);
+  Calculate_Positions();
+  Print_Device();
+  Write_Jgraph();
+}
 
 int main(int argc, char **argv) {
   // Variables
   Graph g;
 
-  g.eps_files.clear();
-  g.eps_files.insert(make_pair(GATEWAY, "symbols/router.eps"));
-  g.eps_files.insert(make_pair(ROUTER, "symbols/router.eps"));
-  g.eps_files.insert(make_pair(SWITCH, "symbols/switch.eps"));
-  g.eps_files.insert(make_pair(HOST, "symbols/client.eps"));
+  // Error checking and opening files
+  if (argc != 3) {
+    fprintf(stderr, "usage: wnet <network-descriptor-file> <output-jgr-file>\n");
+    exit(1);
+  }
 
   g.fin.open(argv[1]);
   g.fout.open(argv[2]);
 
-  g.Read_From_Stream();
-  g.Assign_Depths(g.root->children[0]);
+  if (!g.fin.is_open()) {
+    fprintf(stderr, "couldn't open network description file: %s\n", argv[1]);
+  }
 
-  g.Calculate_Positions();
-  g.Print_Device();
-  g.Write_Jgraph();
+  if (!g.fout.is_open()) {
+    fprintf(stderr, "couldn't open jgr output file: %s\n", argv[2]);
+  }
+
+  // Do the thing.
+  g.Execute_All();
   
+  return 0;
 }

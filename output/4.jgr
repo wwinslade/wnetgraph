@@ -1,70 +1,36 @@
 newgraph
-xaxis min -70 max 70 nodraw
-yaxis min -70 max 70 nodraw
+xaxis min -30 max 30 nodraw
+yaxis min -30 max 30 nodraw
 
-newline pts 0 46.6667 0 23.3333
-newline pts 0 23.3333 10 0
-newline pts 10 0 20 -23.3333
-newline pts 10 0 -10 0
-newline pts 0 23.3333 -10 0
-newline pts -10 0 -20 -23.3333
-newline pts -10 0 10 0
-newline pts -10 0 20 0
-newline pts 0 23.3333 20 0
-newline pts 20 0 10 -23.3333
-newline pts 10 -23.3333 10 -46.6667
-newline pts 10 -23.3333 -10 -23.3333
-newline pts 20 0 -10 0
-newline pts 20 0 -20 0
-newline pts 0 23.3333 -20 0
-newline pts -20 0 -10 -23.3333
-newline pts -10 -23.3333 -10 -46.6667
-newline pts -10 -23.3333 10 -23.3333
-newline pts -20 0 -10 -46.6667
-newline pts -20 0 20 0
-newline pts 0 23.3333 10 23.3333
-newline pts 0 46.6667 10 23.3333
-newline pts 10 23.3333 10 0
-newline pts 10 0 20 -23.3333
-newline pts 10 0 -10 0
-newline pts 10 23.3333 -10 0
-newline pts -10 0 -20 -23.3333
-newline pts -10 0 10 0
-newline pts -10 0 20 0
-newline pts 10 23.3333 -20 0
-newline pts -20 0 -10 -23.3333
-newline pts -10 -23.3333 -10 -46.6667
-newline pts -10 -23.3333 10 -23.3333
-newline pts -20 0 -10 -46.6667
-newline pts -20 0 20 0
-newline pts 10 23.3333 0 23.3333
-newline pts 0 46.6667 -10 23.3333
-newline pts 0 46.6667 10 0
-newline pts 10 0 20 -23.3333
-newline pts 10 0 -10 0
-newline pts 0 46.6667 20 0
-newline pts 20 0 10 -23.3333
-newline pts 10 -23.3333 10 -46.6667
-newline pts 10 -23.3333 -10 -23.3333
-newline pts 20 0 -10 0
-newline pts 20 0 -20 0
-newline pts 0 46.6667 -20 0
-newline pts -20 0 -10 -23.3333
-newline pts -10 -23.3333 -10 -46.6667
-newline pts -10 -23.3333 10 -23.3333
-newline pts -20 0 -10 -46.6667
-newline pts -20 0 20 0
-newcurve eps symbols/switch.eps marksize 3 3 pts 10 -23.3333
-newcurve eps symbols/switch.eps marksize 3 3 pts -10 -23.3333
-newcurve eps symbols/switch.eps marksize 3 3 pts 0 23.3333
-newcurve eps symbols/switch.eps marksize 3 3 pts 10 23.3333
-newcurve eps symbols/switch.eps marksize 3 3 pts -10 23.3333
-newcurve eps symbols/switch.eps marksize 3 3 pts 10 0
-newcurve eps symbols/switch.eps marksize 3 3 pts -10 0
-newcurve eps symbols/switch.eps marksize 3 3 pts 20 0
-newcurve eps symbols/switch.eps marksize 3 3 pts -20 0
-newcurve eps symbols/client.eps marksize 3 3 pts 20 -23.3333
-newcurve eps symbols/client.eps marksize 3 3 pts -20 -23.3333
-newcurve eps symbols/client.eps marksize 3 3 pts 10 -46.6667
-newcurve eps symbols/client.eps marksize 3 3 pts -10 -46.6667
-newcurve eps symbols/router.eps marksize 3 3 pts 0 46.6667
+newline pts 0 21.4286 0 12.8571
+newline pts 0 12.8571 0 4.28571
+newline pts 0 4.28571 -8.57143 -4.28571
+newline pts -8.57143 -4.28571 -17.1429 -12.8571
+newline pts -17.1429 -12.8571 -17.1429 -21.4286
+newline pts -17.1429 -12.8571 17.1429 -12.8571
+newline pts -8.57143 -4.28571 17.1429 -12.8571
+newline pts 17.1429 -12.8571 17.1429 -21.4286
+newline pts 17.1429 -12.8571 -17.1429 -12.8571
+newline pts -8.57143 -4.28571 8.57143 -4.28571
+newline pts 0 4.28571 8.57143 -4.28571
+newline pts 8.57143 -4.28571 -8.57143 -12.8571
+newline pts -8.57143 -12.8571 -8.57143 -21.4286
+newline pts -8.57143 -12.8571 8.57143 -12.8571
+newline pts 8.57143 -4.28571 8.57143 -12.8571
+newline pts 8.57143 -12.8571 8.57143 -21.4286
+newline pts 8.57143 -12.8571 -8.57143 -12.8571
+newline pts 8.57143 -4.28571 -8.57143 -4.28571
+
+newcurve eps symbols/client.eps marksize 3 3 pts 8.57143 -21.4286
+newcurve eps symbols/server.eps marksize 3 3 pts -8.57143 -21.4286
+newcurve eps symbols/switch.eps marksize 3 3 pts 8.57143 -12.8571
+newcurve eps symbols/switch.eps marksize 3 3 pts -8.57143 -12.8571
+newcurve eps symbols/router.eps marksize 3 3 pts 8.57143 -4.28571
+newcurve eps symbols/switch.eps marksize 3 3 pts 17.1429 -12.8571
+newcurve eps symbols/client.eps marksize 3 3 pts 17.1429 -21.4286
+newcurve eps symbols/switch.eps marksize 3 3 pts -17.1429 -12.8571
+newcurve eps symbols/router.eps marksize 3 3 pts -8.57143 -4.28571
+newcurve eps symbols/firewall.eps marksize 3 3 pts 0 4.28571
+newcurve eps symbols/firewall.eps marksize 3 3 pts 0 12.8571
+newcurve eps symbols/server.eps marksize 3 3 pts -17.1429 -21.4286
+newcurve eps symbols/router.eps marksize 3 3 pts 0 21.4286
