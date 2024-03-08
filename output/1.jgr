@@ -1,11 +1,12 @@
 newgraph
-xaxis min 0 max 20 nodraw
-yaxis min 0 max 20 nodraw
+xaxis min -15 max 15 nodraw
+yaxis min -15 max 15 nodraw
 
-newline pts 15 25 15 15
-newline pts 15 15 15 5
-newline pts 15 15 5 5
-newcurve eps symbols/client.eps marksize 3 3 pts 15 5
-newcurve eps symbols/client.eps marksize 3 3 pts 5 5
-newcurve eps symbols/router.eps marksize 3 3 pts 15 25
-newcurve eps symbols/switch.eps marksize 3 3 pts 15 15
+newline pts 0 7.5 0 0
+newline pts 0 0 7.5 -7.5
+newline pts 0 0 -7.5 -7.5
+
+newcurve eps symbols/client.eps marksize 3 3 pts 7.5 -7.5
+newcurve eps symbols/client.eps marksize 3 3 pts -7.5 -7.5
+newcurve eps symbols/router.eps marksize 3 3 pts 0 7.5
+newcurve eps symbols/switch.eps marksize 3 3 pts 0 0

@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -Wextra 
+CFLAGS = -Wall -Wextra
 
 JGRAPH_MAC = /Users/williamwinslade/Documents/jgraph/jgraph
 JGRAPH_HYDRA = /home/jplank/bin/LINUX-X86_64/jgraph JGRAPH

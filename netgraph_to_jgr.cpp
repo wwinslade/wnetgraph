@@ -4,8 +4,17 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <unordered_map>
 
 using namespace std;
+
+/*
+Notes for potential future improvement: Instead of traversing the map as I am now, 
+instead print using a DFS to allow better placement of child nodes relative to their
+parents. 
+
+While performing the DFS, still keep track of the coords used for each depth level
+*/
 
 // Typedef for spec of what the network device type is
 typedef enum 
@@ -16,6 +25,7 @@ typedef enum
   ROUTER,
   SWITCH,
   HOST,
+  SERVER,
 } NODETYPE;
 
 // Node class. These are held in a map keyed on the hostname string.
@@ -24,7 +34,7 @@ class Node {
     Node();
     string hostname;
     int depth;
-    int x, y;
+    double x, y;
     NODETYPE type;
     vector < class Node * > children;
     vector < class Node * > peers;
@@ -41,7 +51,6 @@ Node::Node() {
   children.clear();
   peers.clear();
   parents.clear();
-
 }
 
 // The class that does all the real work. 
@@ -52,10 +61,11 @@ class Graph {
     void Read_New_Device(Node *n);  // Facilitates the creation of each device's node, creating links between nodes
     void Print_Device();            // Debugging method, prints out each device, its xy coords, depth, and links
     void Assign_Depths(Node *n);    // Performs a simple pre-order DFS and assigns depths to each node
-    void Calculate_Positions();     // Determines how big the graph is physically, and calculates places where Assign_Positions can place nodes in space
-    void Assign_Positions();        // Assigns nodes to locations in space based on their hierarchical structure
+    void Count_Depths();
+    void Calculate_Positions();     // Determines how big the graph is, calculates places where Assign_Positions can place nodes in space, and assigns them to each node
     void Write_Links(Node *n);      // Writes jgraph link lines between nodes to output stream via DFS
     void Write_Jgraph();            // Writes jgraph setup, calls Write_Links, and prints each node's device symbol to the output stream
+    void Execute_All();
 
     int out_mode;                   // Defunct right now
 
@@ -64,9 +74,10 @@ class Graph {
     int nx, ny;                     // The dimensions of the jgraph graph
 
     Node *root;                     // Sentinel node for ease of access
-    map < string, Node * > all_nodes; // Map of all nodes, keyed on the hostname string
+    unordered_map < string, Node * > all_nodes; // Map of all nodes, keyed on the hostname string
     map < NODETYPE, string > eps_files; // Map of file locations for the .eps files used to print the various device symbols
 
+    vector < int > depth_counts;    // Vector of number of nodes at each depth, where the depth is the index
     vector < double > x_coords;     // Vector of possible x locations to place a node
     vector < double > y_coords;     // Vector of possible y locations to place a node
 
@@ -90,7 +101,7 @@ void Graph::Read_New_Device(Node *n)
   string word1, wordn;
   string rest;
   istringstream sin;
-  map < string, Node * >::iterator mit;
+  unordered_map < string, Node * >::iterator mit;
   Node *nit;
 
   while(!fin.eof()) {
@@ -192,6 +203,8 @@ void Graph::Read_New_Device(Node *n)
         }
       } else if (wordn == "host") {
         n->type = HOST;
+      } else if (wordn == "server") {
+        n->type = SERVER;
       } else {
         printf("\t\tType unrecognized, try again");
       }
@@ -205,13 +218,13 @@ void Graph::Read_New_Device(Node *n)
 }
 
 void Graph::Print_Device() {
-  int i;
+  size_t i;
   Node *n;
-  map <string, Node *>::iterator mit;
+  unordered_map <string, Node *>::iterator mit;
 
   for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
     n = mit->second;
-    printf("%s (%d) [%d, %d]:\n", n->hostname.c_str(), n->depth, n->x, n->y);
+    printf("%s (%d) [%lf, %lf]:\n", n->hostname.c_str(), n->depth, n->x, n->y);
     printf("  UPLINKS:\n");
     for (i = 0; i < n->parents.size(); i++) {
       printf("    %s\n", n->parents[i]->hostname.c_str());
@@ -235,8 +248,7 @@ void Graph::Read_From_Stream()
   string name = "";
   istringstream liness;
   Node *device_in;
-  map < string, Node * >::iterator nit;
-  NODETYPE rm = GLOBAL;
+  unordered_map < string, Node * >::iterator nit;
   
   root = new Node;
   root->depth = -1;
@@ -273,7 +285,8 @@ void Graph::Read_From_Stream()
 
 void Graph::Assign_Depths(Node *n) {
   Node *nit;
-  int i, current_depth;
+  size_t i; 
+  int current_depth;
 
   current_depth = n->depth + 1;
   if (current_depth > max_depth) max_depth = current_depth;
@@ -286,93 +299,159 @@ void Graph::Assign_Depths(Node *n) {
   }
 }
 
+void Graph::Count_Depths() {
+  // To make printing neater, need a count of the number of nodes at each depth.
+  // Can now simply traverse the map and count
+  Node *nit;
+  unordered_map < string, Node * >::iterator mit;
+
+  depth_counts.clear();
+  depth_counts.resize(max_depth, 0);
+  
+  for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
+    nit = mit->second;
+    depth_counts[nit->depth]++;
+  }
+}
+
 void Graph::Calculate_Positions() {
+  /* Potential area for improvement:
+    For each node, determine the number of children. Change the size of the x slice depending on the number of children. 
+    Do this for every node, so that children of parents are closer to eachother, reducing line overlap
+  */
+  
+  
   int dims_coeff;
   int i;
-  double slice_width;
-  double pos;
+  double minx, maxx, miny, maxy;
+  double xslice_width;
+  double yslice_width;
   Node *nit;
-  
+  unordered_map < string, Node * >::iterator mit;
+  vector < int > pos_counter;
+
+  // Go ahead and call the depth count method
+  Count_Depths();
+
+  // A coefficient for how big the graph should be relative to its number of leaf nodes
   dims_coeff = 10;
 
   x_coords.clear();
   y_coords.clear();
 
-  nx = num_leafs * dims_coeff;
-  ny = nx;
+  // If the graph has more leafs nodes than depth, use that to determine the size. Otherwise, vice versa
+  // I want to break the graph up into nice slices to neatly place the symbols, so determine the size of each slice
+  if (num_leafs > max_depth) {
+    nx = num_leafs * dims_coeff;
+    ny = nx;
+    xslice_width = (double) nx / (num_leafs + 1);
+    yslice_width = (double) ny / (num_leafs + 1);
+  } else {
+    nx = max_depth * dims_coeff;
+    ny = nx;
+    xslice_width = (double) nx / (max_depth + 1);
+    yslice_width = (double) ny / (max_depth + 1);
+  }
 
-  slice_width = (double) nx / num_leafs;
+  // I want (0,0) to be dead center of the graph, so find the min and max x and y
+  minx = 0 - ((double) nx / 2);
+  maxx = 0 + ((double) nx / 2);
+  miny = 0 - ((double) ny / 2);
+  maxy = 0 + ((double) ny / 2);
+
+  printf("Global: x:[%lf, %lf] ; y:[%lf, %lf]\n", minx, maxx, miny, maxy);
+  printf("X slice width: %lf\n", xslice_width);
+  printf("Y slice width: %lf\n", yslice_width);
+
+  /*
+  Here I will put coordinates for potential symbols into a vector.
+  Depending on the depth of each node, and how many nodes are at that depth,
+  the nodes will be printed, starting from the top center of the graph.
+  */
 
   x_coords.clear();
   y_coords.clear();
+  
+  // If the number of leafs is odd, we will consider 0 as eligible for a symbol. Otherwise, don't
+  // This will help with neatness
+  /* if (num_leafs % 2 == 0) {
+    
+  } else {
+    x_coords.push_back(0);
+  } */
+
   x_coords.push_back(0);
-  y_coords.push_back(0);
 
+  // Debug prints
   printf("Num leafs: %d\n", num_leafs);
+  printf("Max depth: %d\n", max_depth);
 
   for (i = 1; i < (num_leafs / 2) + 1; i++) {
-    x_coords.push_back(0 + (slice_width * i));
-    x_coords.push_back(0 - (slice_width * i));
+    x_coords.push_back(0 + ((xslice_width) * (double) i));
+    x_coords.push_back(0 - ((xslice_width) * (double) i));
   }
 
-  for (i = 1; i < (num_leafs / 2) + 1; i++) {
-    y_coords.push_back(0 + (slice_width * i));
-    y_coords.push_back(0 - (slice_width * i));
+  for (i = 1; i < max_depth + 2; i++) {
+    y_coords.push_back(maxy - (yslice_width * i));
   }
 
+  // Debugging printing in these two loops
   printf("x_coords:");
-  for (i = 0; i < x_coords.size(); i++) {
-    printf(" %d", x_coords[i]);
+  for (i = 0; i < (int) x_coords.size(); i++) {
+    printf(" %lf", x_coords[i]);
   }
   printf("\n");
 
   printf("y_coords:");
-  for (i = 0; i < y_coords.size(); i++) {
-    printf(" %d", y_coords[i]);
+  for (i = 0; i < (int) y_coords.size(); i++) {
+    printf(" %lf", y_coords[i]);
   }
   printf("\n");
 
-  nit = root->children[0];
-  nit->x = 0;
-  nit->y = 0;
-
-
-
-  Assign_Positions();
-
-}
-
-void Graph::Assign_Positions() {
-  Node *n;
-  map < string, Node * >::iterator mit;
-  vector < int > pos_counter;
+  // Initialize the position counter. Will be useful for keeping track of where each node at each depth should be printed
+  pos_counter.clear();
   pos_counter.resize(max_depth, 0);
 
-  for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
-    n = mit->second;
-    n->y = n->depth;
-    n->x = pos_counter[n->y];
-    pos_counter[n->y]++;
+  // For each depth, check if the number of nodes is even. If it is, exclude x=0, else, include it (help with centering for depths where num nodes is even)
+  for (i = 0; i < (int) pos_counter.size(); i++) {
+    if (depth_counts[i] % 2 == 0) {
+      pos_counter[i] = 1;
+    }
   }
+
+  // The gateway node will have a preset point in space, always want it in the top center of the graph
+  nit = root->children[0];
+  nit->x = 0;
+  nit->y = y_coords[nit->depth];
+
+  // Assign coordinate values to the rest of the nodes
+  for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
+    if (mit->second == root->children[0]) continue; // Always want the gateway to be at x=0, so skip it
+    nit = mit->second;
+    nit->x = x_coords[pos_counter[nit->depth]];
+    nit->y = y_coords[nit->depth];
+    pos_counter[nit->depth]++;
+  }
+
 }
 
+
 void Graph::Write_Links(Node *n) {
-  int i;
+  size_t i;
 
   for (i = 0; i < n->children.size(); i++) {
-    fout << "newline pts " << x_coords[num_leafs - n->x] << " " << y_coords[num_leafs - n->y - 1] << " " << x_coords[num_leafs - n->children[i]->x] << " " << y_coords[num_leafs - n->children[i]->y - 1] << endl;
+    fout << "newline pts " << n->x << " " << n->y << " " << n->children[i]->x << " " << n->children[i]->y << endl;
     Write_Links(n->children[i]);
   }
 
   for (i = 0; i < n->peers.size(); i++) {
-    fout << "newline pts " << x_coords[num_leafs - n->x] << " " << y_coords[num_leafs - n->y - 1] << " " << x_coords[num_leafs - n->peers[i]->x] << " " << y_coords[num_leafs - n->peers[i]->y - 1] << endl;
+    fout << "newline pts " << n->x << " " << n->y << " " << n->peers[i]->x << " " << n->peers[i]->y << endl;
   }
 }
 
 void Graph::Write_Jgraph() {
-  ostream *os;
   Node *nit;
-  map < string, Node * > ::iterator mit;
+  unordered_map < string, Node * > ::iterator mit;
   int dims_coeff;
   double dims_offset;
 
@@ -387,32 +466,55 @@ void Graph::Write_Jgraph() {
 
   // Output link lines
   Write_Links(root->children[0]);
+  fout << endl;
 
   // Write the symbols for each device
   for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
     nit = mit->second;
-    fout << "newcurve eps " << eps_files[nit->type] << " marksize " << dims_coeff * dims_offset << " " << dims_coeff * dims_offset << " pts " << x_coords[num_leafs - nit->x] << " " << y_coords[max_depth - nit->y - 1] << endl;
+    fout << "newcurve eps " << eps_files[nit->type] << " marksize " << dims_coeff * dims_offset << " " << dims_coeff * dims_offset << " pts " << nit->x << " " << nit->y << endl;
   }
 
+}
+void Graph::Execute_All() {
+  // File paths for symbol .eps files are in this map
+  eps_files.clear();
+  eps_files.insert(make_pair(GATEWAY, "symbols/router.eps"));
+  eps_files.insert(make_pair(ROUTER, "symbols/router.eps"));
+  eps_files.insert(make_pair(SWITCH, "symbols/switch.eps"));
+  eps_files.insert(make_pair(HOST, "symbols/client.eps"));
+  eps_files.insert(make_pair(FIREWALL, "symbols/firewall.eps"));
+  eps_files.insert(make_pair(SERVER, "symbols/server.eps"));
+
+  Read_From_Stream();
+  Assign_Depths(root->children[0]);
+  Calculate_Positions();
+  Print_Device();
+  Write_Jgraph();
 }
 
 int main(int argc, char **argv) {
   // Variables
   Graph g;
 
-  g.eps_files.clear();
-  g.eps_files.insert(make_pair(GATEWAY, "symbols/router.eps"));
-  g.eps_files.insert(make_pair(ROUTER, "symbols/router.eps"));
-  g.eps_files.insert(make_pair(SWITCH, "symbols/switch.eps"));
-  g.eps_files.insert(make_pair(HOST, "symbols/client.eps"));
+  // Error checking and opening files
+  if (argc != 3) {
+    fprintf(stderr, "usage: wnet <network-descriptor-file> <output-jgr-file>\n");
+    exit(1);
+  }
 
   g.fin.open(argv[1]);
   g.fout.open(argv[2]);
 
-  g.Read_From_Stream();
-  g.Assign_Depths(g.root->children[0]);
-  g.Print_Device();
-  g.Calculate_Positions();
-  g.Write_Jgraph();
+  if (!g.fin.is_open()) {
+    fprintf(stderr, "couldn't open network description file: %s\n", argv[1]);
+  }
+
+  if (!g.fout.is_open()) {
+    fprintf(stderr, "couldn't open jgr output file: %s\n", argv[2]);
+  }
+
+  // Do the thing.
+  g.Execute_All();
   
+  return 0;
 }
