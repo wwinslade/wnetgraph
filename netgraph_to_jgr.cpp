@@ -63,6 +63,7 @@ class Graph {
     void Assign_Depths(Node *n);    // Performs a simple pre-order DFS and assigns depths to each node
     void Count_Depths();
     void Calculate_Positions();     // Determines how big the graph is, calculates places where Assign_Positions can place nodes in space, and assigns them to each node
+    void Assign_Positions(Node *n);
     void Write_Links(Node *n);      // Writes jgraph link lines between nodes to output stream via DFS
     void Write_Jgraph();            // Writes jgraph setup, calls Write_Links, and prints each node's device symbol to the output stream
     void Execute_All();
@@ -78,6 +79,7 @@ class Graph {
     map < NODETYPE, string > eps_files; // Map of file locations for the .eps files used to print the various device symbols
 
     vector < int > depth_counts;    // Vector of number of nodes at each depth, where the depth is the index
+    vector < int > pos_counter;
     vector < double > x_coords;     // Vector of possible x locations to place a node
     vector < double > y_coords;     // Vector of possible y locations to place a node
 
@@ -326,9 +328,7 @@ void Graph::Calculate_Positions() {
   double minx, maxx, miny, maxy;
   double xslice_width;
   double yslice_width;
-  Node *nit;
   unordered_map < string, Node * >::iterator mit;
-  vector < int > pos_counter;
 
   // Go ahead and call the depth count method
   Count_Depths();
@@ -419,20 +419,26 @@ void Graph::Calculate_Positions() {
     }
   }
 
-  // The gateway node will have a preset point in space, always want it in the top center of the graph
-  nit = root->children[0];
-  nit->x = 0;
-  nit->y = y_coords[nit->depth];
+  // Perform a recursive DFS to assign coordinate values,
+  Assign_Positions(root->children[0]);
+}
 
-  // Assign coordinate values to the rest of the nodes
-  for (mit = all_nodes.begin(); mit != all_nodes.end(); mit++) {
-    if (mit->second == root->children[0]) continue; // Always want the gateway to be at x=0, so skip it
-    nit = mit->second;
-    nit->x = x_coords[pos_counter[nit->depth]];
-    nit->y = y_coords[nit->depth];
-    pos_counter[nit->depth]++;
+void Graph::Assign_Positions(Node *n) {
+  size_t i;
+  
+  // Gateway node will have a pre-set point in space, always want it at the top center of the graph
+  if (n == root->children[0]) {
+    n->x = 0;
+    n->y = y_coords[n->depth];
+  } else {
+    n->x = x_coords[pos_counter[n->depth]];
+    n->y = y_coords[n->depth];
+    pos_counter[n->depth]++;
   }
 
+  for (i = 0; i < n->children.size(); i++) {
+    Assign_Positions(n->children[i]);
+  }
 }
 
 
