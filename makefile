@@ -1,17 +1,21 @@
 CC = g++
 CFLAGS = -Wall -Wextra
 
-JGRAPH_MAC = /Users/williamwinslade/Documents/jgraph/jgraph
-JGRAPH_HYDRA = /home/jplank/bin/LINUX-X86_64/jgraph JGRAPH
-JGRAPH = $(JGRAPH_MAC)
+JGRAPH_LOCAL = /Users/williamwinslade/Documents/jgraph/jgraph
+JGRAPH_HYDRA = /home/jplank/bin/LINUX-X86_64/jgraph
+JGRAPH = $(JGRAPH_HYDRA)
 
 all: netgraph_to_jgr
 
 netgraph_to_jgr:
 	$(CC) $(CFLAGS) -o wnet netgraph_to_jgr.cpp 
 
-examples: ex1 ex2 ex3 ex4 ex5
-	echo 'Examples compiled in PDF form in ./output/'
+examples: netgraph_to_jgr output_dir ex1 ex2 ex3 ex4 ex5
+	@echo ''
+	@echo 'Examples compiled in PDF form in ./output/'
+
+output_dir:
+	mkdir -p output
 
 ex1:
 	./wnet examples/1.txt output/1.jgr
@@ -38,5 +42,8 @@ ex5:
 	$(JGRAPH) -P output/5.jgr > output/5.ps
 	ps2pdf output/5.ps output/5.pdf
 
-
+clean: output_dir
+	rm -f wnet
+	rm -f output/*
+	rmdir output
 

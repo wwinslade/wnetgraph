@@ -196,7 +196,7 @@ void Graph::Read_New_Device(Node *n)
         n->type = SWITCH;
       } else if (wordn == "gateway") {
         if (root->children.size() > 0) {
-          printf("\t\tError: Only one gateway may be defined per network, rejected\n");
+          //printf("\t\tError: Only one gateway may be defined per network, rejected\n");
         } else {
           n->type = GATEWAY;
           root->children.push_back(n);
@@ -206,12 +206,12 @@ void Graph::Read_New_Device(Node *n)
       } else if (wordn == "server") {
         n->type = SERVER;
       } else {
-        printf("\t\tType unrecognized, try again");
+        //printf("\t\tType unrecognized, try again");
       }
     } else if (word1 == "end") {
       return;
     } else {
-      printf("\tCommand unrecognized, try again");
+      //printf("\tCommand unrecognized, try again");
     }
   }
   return;
@@ -323,7 +323,8 @@ void Graph::Calculate_Positions() {
   
   int dims_coeff;
   int i;
-  double minx, maxx, miny, maxy;
+  //double minx, maxx, miny, 
+  double maxy;
   double xslice_width;
   double yslice_width;
   Node *nit;
@@ -354,14 +355,14 @@ void Graph::Calculate_Positions() {
   }
 
   // I want (0,0) to be dead center of the graph, so find the min and max x and y
-  minx = 0 - ((double) nx / 2);
+  /* minx = 0 - ((double) nx / 2);
   maxx = 0 + ((double) nx / 2);
-  miny = 0 - ((double) ny / 2);
+  miny = 0 - ((double) ny / 2); */
   maxy = 0 + ((double) ny / 2);
 
-  printf("Global: x:[%lf, %lf] ; y:[%lf, %lf]\n", minx, maxx, miny, maxy);
+ /*  printf("Global: x:[%lf, %lf] ; y:[%lf, %lf]\n", minx, maxx, miny, maxy);
   printf("X slice width: %lf\n", xslice_width);
-  printf("Y slice width: %lf\n", yslice_width);
+  printf("Y slice width: %lf\n", yslice_width); */
 
   /*
   Here I will put coordinates for potential symbols into a vector.
@@ -383,8 +384,8 @@ void Graph::Calculate_Positions() {
   x_coords.push_back(0);
 
   // Debug prints
-  printf("Num leafs: %d\n", num_leafs);
-  printf("Max depth: %d\n", max_depth);
+  /* printf("Num leafs: %d\n", num_leafs);
+  printf("Max depth: %d\n", max_depth); */
 
   for (i = 1; i < (num_leafs / 2) + 1; i++) {
     x_coords.push_back(0 + ((xslice_width) * (double) i));
@@ -396,7 +397,7 @@ void Graph::Calculate_Positions() {
   }
 
   // Debugging printing in these two loops
-  printf("x_coords:");
+  /* printf("x_coords:");
   for (i = 0; i < (int) x_coords.size(); i++) {
     printf(" %lf", x_coords[i]);
   }
@@ -406,7 +407,7 @@ void Graph::Calculate_Positions() {
   for (i = 0; i < (int) y_coords.size(); i++) {
     printf(" %lf", y_coords[i]);
   }
-  printf("\n");
+  printf("\n"); */
 
   // Initialize the position counter. Will be useful for keeping track of where each node at each depth should be printed
   pos_counter.clear();
@@ -488,7 +489,7 @@ void Graph::Execute_All() {
   Read_From_Stream();
   Assign_Depths(root->children[0]);
   Calculate_Positions();
-  Print_Device();
+  //Print_Device();
   Write_Jgraph();
 }
 
