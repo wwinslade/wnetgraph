@@ -5,14 +5,14 @@
 # wnetgraph
 wnetgraph is a jgraph based, command line utility to create visual diagrams of networks based on the hierarchy of the devices within the network, by creating a graph representation from a descriptor file and using a series of graph algorithms for spatial organization.
 
-## Compilation and Use (For the TAs)
+## Compilation and Examples (For the TAs)
 A makefile is provided. The makefile in the repo assumes you are using gcc as your C compiler, and that you are running on one of UT's Hydra/Tesla machines. If either assumption is wrong, you will need to change your compiler in the makefile, or change the variable `JGRAPH_LOCAL` within the makefile to the path to your local jgraph installation. Additionally, the makefile assumes `convert` is installed from imagemagick.
 
 Calling `make examples` will make all necessary calls to create 5 pre-created example diagrams from the specification `.txt` files in `./examples/`. These diagrams can be found in `.pdf` files in the created `./output/` directory.
 
 `make clean` will perform the usual make clean function, along with removing all the output the examples may have created.
 
-### Syntax
+## Syntax
 A network of devices is specified in a `.txt` file using the syntax as described below:
 
 A new device is added to the network description file by providing a hostname. The hostname can contain any alphanumeric characters, including spaces, however, this hostname *must* be unique within the specification file. After specifying a hostname, there are 5 different options you may specify for each unique device. You may specify none of these, some, or all. Each specification option must be provided on a new line (whitespace is ignored aside from the newline character). 
