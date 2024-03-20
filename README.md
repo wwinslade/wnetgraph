@@ -3,7 +3,7 @@
 </p>
 
 # wnetgraph
-wnetgraph is a jgraph based, command line utility to create visual diagrams of network devices based on their hierarchy within the network, by creating a graph representation from a descriptor file and using a series of graph algorithms for spatial organization.
+wnetgraph is a jgraph based, command line utility to create visual diagrams of networks based on the hierarchy of the devices within the network, by creating a graph representation from a descriptor file and using a series of graph algorithms for spatial organization.
 
 ## Compilation and Use (For the TAs)
 A makefile is provided. The makefile in the repo assumes you are using gcc as your C compiler, and that you are running on one of UT's Hydra/Tesla machines. If either assumption is wrong, you will need to change your compiler in the makefile, or change the variable `JGRAPH_LOCAL` within the makefile to the path to your local jgraph installation. Additionally, the makefile assumes `convert` is installed from imagemagick.
