@@ -23,7 +23,7 @@ An additional semantic: every network specification file must provide exactly on
 
 #### Specification Options
 1. `hostname`
-  - Note: changing the hostname of the network device will change 
+    - Note: changing the hostname of the network device will change 
 2. `type`
   - `type` must be followed by one of the following arguments:
     - `gateway`
@@ -33,11 +33,11 @@ An additional semantic: every network specification file must provide exactly on
     - `server`
     - `host`
 3. `uplink`
-  - `uplink` must be followed by a space, and a valid hostname for a device
+    - `uplink` must be followed by a space, and a valid hostname for a device
 4. `peer`
-  - `peer` must be followed by a space, and a valid hostname for a device
+    - `peer` must be followed by a space, and a valid hostname for a device
 5. `host`
-  - `host` must be followed by a space, and a valid hostname for a device
+    - `host` must be followed by a space, and a valid hostname for a device
 
 An example:
 ```
