@@ -1,9 +1,0 @@
-{
-  "files.associations": {
-    "stdexcept": "cpp",
-    "vector": "cpp",
-    "ostream": "cpp",
-    "iosfwd": "cpp"
-  },
-  "cmake.configureOnOpen": false
-}
