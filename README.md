@@ -25,13 +25,13 @@ An additional semantic: every network specification file must provide exactly on
 1. `hostname`
     - Note: changing the hostname of the network device will change 
 2. `type`
-  - `type` must be followed by one of the following arguments:
-    - `gateway`
-    - `router`
-    - `firewall`
-    - `switch`
-    - `server`
-    - `host`
+    - `type` must be followed by one of the following arguments:
+      - `gateway`
+      - `router`
+      - `firewall`
+      - `switch`
+      - `server`
+      - `host`
 3. `uplink`
     - `uplink` must be followed by a space, and a valid hostname for a device
 4. `peer`
