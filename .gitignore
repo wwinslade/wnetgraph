@@ -1,3 +1,5 @@
 *.pdf
 *.ps
 *.jgr
+.DS_Store
+*/.DS_Store
