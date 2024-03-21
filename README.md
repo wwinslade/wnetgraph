@@ -92,3 +92,37 @@ Spatial organization of the resulting diagram is accomplished by hierarchically 
 To organize the image horizontally, the program starts at the middle of the image, then progressively moves outward in both directions from the y-axis. Currently, there is room for improvement in this process. As the number of hosts connected to a device increase, the hosts are not guaranteed to be grouped neatly together with their parent device, and some messy lines *can* occur as a result. However, I have guaranteed that two images will *never* overlap eachother. So while things can get messy with complex networks, there is no fear of one device occluding another.
 
 A good instance of this area for improvement is in example 3.
+
+## A Complete Example
+Let's consider a typical residential network. There will be a gateway (router/modem/firewall combo) device providing an internet connection. Let's also say the user has connected a basic unmanaged switch to their router, and has two machines connected to it. We can describe this setup very easily in a wnetgraph description file, `home.txt`:
+
+```
+Router
+  type gateway
+  host Switch
+end
+
+Switch
+  type switch
+  host GamingPC
+  host NAS
+end
+
+NAS
+  type server
+end
+```
+
+We can then use wnetgraph to create a .jgr file for a visual representation of our home network.
+```
+UNIX> wnet home.txt home.jgr
+```
+From there, we can apply a standard jgraph workflow to obtain our `.pdf` file:
+```
+UNIX> jgraph -P home.jgr > home.ps
+UNIX> convert home.ps home.pdf
+```
+And we are left with `home.pdf` with our network diagram to use how we best see fit:
+<p align="center">
+  <img src="example.png" alt="Home Example" width=300 />
+</p>
