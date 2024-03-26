@@ -23,7 +23,7 @@ An additional semantic: every network specification file must provide exactly on
 
 #### Specification Options
 1. `hostname`
-    - Note: changing the hostname of the network device will change 
+    - Note: changing the hostname of the network device will change the key for that device. If you choose to modify the hostname of a device, you then must subsequently refer to that device by its updated hostname if you wish to make additional configurations later.
 2. `type`
     - `type` must be followed by one of the following arguments:
       - `gateway`
