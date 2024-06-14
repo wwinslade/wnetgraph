@@ -111,6 +111,7 @@ end
 NAS
   type server
 end
+done
 ```
 
 We can then use wnetgraph to create a .jgr file for a visual representation of our home network.
