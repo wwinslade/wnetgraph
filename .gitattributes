@@ -1,0 +1,3 @@
+*.cpp linguist-detectable=true
+*.ps linguist-detectable=false
+*.eps linguist-detectable=false
